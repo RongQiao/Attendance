@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -19,11 +20,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import Logical.ApplicationLogical.ClassInfo;
 import Logical.ApplicationLogical.StudentInfo;
 import Logical.ApplicationLogical.StudentManager;
-import Logical.ApplicationLogical.StudentManager;
-import Logical.DomainBase.Student;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -31,12 +29,16 @@ import Logical.DomainBase.Student;
  * @author qiao
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
-public class EditStudent extends JFrame{
+public class EditStudent extends AttdFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private StudentManager studentManager;
 	
 	//swing objects
-	private JPanel mainPanel;
-	private JPanel leftPanel;
+	private JScrollPane leftPanel;
 	private JPanel rightPanel;
 	private JPanel rTopPanel;
 	private JPanel rBotPanel;
@@ -56,29 +58,20 @@ public class EditStudent extends JFrame{
 	//constructor
 	public EditStudent() {
 		studentManager = StudentManager.getInstance();			
-		initMainFrame();
+		initFrame();
 		initTable();
 		initDetailField();
 		initBtn();
-		//show exist course
-		updateStudent();
 	}	
 	
-	private void initMainFrame() {
+	public void initFrame() {
+		super.initFrame();
 		//frame
-		setTitle("Edit Student");
-		setSize(600, 400);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
-		getContentPane().add(mainPanel);		
+		setTitle("Edit Student");	
 	}
 	
 	private void initTable() {
-		//left panel for course table
-		leftPanel = new JPanel();
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
-		mainPanel.add(leftPanel);
+		//left panel for student table
 		String[] columnNames = {"studentId", "First Name", "Last Name"};
 		String[][] tableStudent = {
 				{"1", "AF", "AL"}
@@ -87,7 +80,8 @@ public class EditStudent extends JFrame{
 		studentTable = new JTable(tableModel);
 		ListSelectionModel selectionModel = studentTable.getSelectionModel();
 		selectionModel.addListSelectionListener(new studentSelectionHandler());
-		leftPanel.add(studentTable);
+		leftPanel = new JScrollPane(studentTable);
+		mainPanel.add(leftPanel);
 	}
 	
 	private void initDetailField() {
@@ -223,6 +217,8 @@ public class EditStudent extends JFrame{
 	}
 	
 	public void display() {
+		//show exist student
+		updateStudent();
 		setVisible(true);
 	}
 	

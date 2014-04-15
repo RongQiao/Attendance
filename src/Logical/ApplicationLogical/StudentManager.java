@@ -6,8 +6,6 @@ package Logical.ApplicationLogical;
 import java.util.ArrayList;
 import java.util.List;
 
-import Logical.DomainBase.Course;
-import Logical.DomainBase.SchoolClass;
 import Logical.DomainBase.Student;
 import TechnicalService.PData_CSVFile;
 

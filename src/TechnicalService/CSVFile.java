@@ -8,8 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import Logical.ApplicationLogical.AttdRecordInfo;
 import Logical.ApplicationLogical.ClassInfo;
+import Logical.ApplicationLogical.StudentInfo;
 import Logical.DomainBase.Course;
+import Logical.DomainBase.CourseEnrollment;
 import Logical.DomainBase.SchoolClass;
 import Logical.DomainBase.Student;
 
@@ -109,6 +112,36 @@ public class CSVFile extends File{
 		std.setMiddleName(stdStr.substring(indexs[3]+1));
 	}
 
+	public static String format(CourseEnrollment erl) {
+		String erlStr = "";
+		erlStr += erl.getErlStudent().getStudentID();
+		erlStr += ",";
+		erlStr += erl.getErlClass().getClassNumber();
+		
+		return erlStr;
+	}
+
+	public static void format(String erlStr, CourseEnrollment erl) {
+		int[] indexs = getCommaIndexs(erlStr, 2);
+		erl.setErlStudent(new Student(erlStr.substring(indexs[0], indexs[1])));
+		erl.setErlClass(new SchoolClass(erlStr.substring(indexs[1]+1)));
+	}	
+
+	public static String format(AttdRecordInfo ar) {
+		String arStr = "";
+		arStr += ar.getStdInfo().getStudentId();
+		arStr += ",";
+		arStr += Boolean.toString(ar.isAttendant());
+		
+		return arStr;
+	}
+
+	public static void format(String arStr, AttdRecordInfo ar) {
+		int[] indexs = getCommaIndexs(arStr, 2);
+		ar.setStdInfo(new StudentInfo());
+		ar.getStdInfo().setStudentId(arStr.substring(indexs[0], indexs[1]));
+		ar.setAttendant(Boolean.parseBoolean(arStr.substring(indexs[1]+1)));
+	}
 	
 	public void write(String data) {
 		writeFile(data, false);
@@ -182,6 +215,7 @@ public class CSVFile extends File{
 		}
 		return buf.size();
 	}
+
 
 
 

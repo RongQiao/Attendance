@@ -3,8 +3,13 @@
  */
 package Logical.ApplicationLogical;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import Logical.DomainBase.AttdClass;
 import Logical.DomainBase.Student;
+import TechnicalService.PData_CSVFile;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -13,141 +18,75 @@ import Logical.DomainBase.Student;
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class AttdRecordManager {
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	private AttdClass _class;
-
-	/** 
-	 * @return the _class
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public AttdClass get_class() {
-		// begin-user-code
-		return _class;
-		// end-user-code
+	private PDataAgent dataAgent;
+	private static AttdRecordManager instance = null;
+	
+	private AttdRecordManager() {
+		dataAgent = new PData_CSVFile();
 	}
-
-	/** 
-	 * @param _class the _class to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void set_class(AttdClass _class) {
-		// begin-user-code
-		this._class = _class;
-		// end-user-code
+	
+	public static AttdRecordManager getInsance() {
+		if (instance == null) {
+			instance = new AttdRecordManager();
+		}
+		return instance;
 	}
 
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
+	 * @param infoList 
+	 * @param currentCourse 
+	 * @param arDate 
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	private Student student;
-
-	/** 
-	 * @return the student
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public Student getStudent() {
-		// begin-user-code
-		return student;
-		// end-user-code
-	}
-
-	/** 
-	 * @param student the student to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void setStudent(Student student) {
-		// begin-user-code
-		this.student = student;
-		// end-user-code
+	public void addAttdRecord(ClassInfo currentCourse, Date arDate, List<AttdRecordInfo> infoList) {
+		CourseManager crsManager = CourseManager.getInstance();
+		currentCourse = crsManager.getCourse(currentCourse.getClassNumber());
+		dataAgent.addData(currentCourse, arDate, infoList);
 	}
 
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
+	 * @param infoList 
+	 * @param arDate 
+	 * @param currentCourse 
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	public void addAttdRecord() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public void modifyAttdRecord(ClassInfo currentCourse, Date arDate, List<AttdRecordInfo> infoList) {
+		CourseManager crsManager = CourseManager.getInstance();
+		currentCourse = crsManager.getCourse(currentCourse.getClassNumber());
+		dataAgent.modifyData(currentCourse, arDate, infoList);
 	}
 
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
+	 * @param arDate 
+	 * @param currentCourse 
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	public void modifyAttdRecord() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public void removeAttdRecord(ClassInfo currentCourse, Date arDate) {
+		CourseManager crsManager = CourseManager.getInstance();
+		currentCourse = crsManager.getCourse(currentCourse.getClassNumber());
+		dataAgent.removeData(currentCourse, arDate);
 	}
-
+	
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
+	 * @param arDate 
+	 * @param currentCourse 
+	 * @return 
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	public void removeAttdRecord() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public List<AttdRecordInfo> getAttdRecord(ClassInfo currentCourse, Date arDate) {
+		CourseManager crsManager = CourseManager.getInstance();
+		currentCourse = crsManager.getCourse(currentCourse.getClassNumber());
+		List<AttdRecordInfo> infoList = new ArrayList<AttdRecordInfo>();
+		dataAgent.getDataAttdRecord(currentCourse, arDate, infoList);
+		return infoList;
 	}
 
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void saveDataAdd() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
-	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void saveDataModify() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
-	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void saveDataRemove() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
-	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void getAttdRecord() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
-	}
 }

@@ -36,7 +36,7 @@ public class CourseManager {
 	 */
 	public List<ClassInfo> getCourse() {
 		List<ClassInfo> listCrs = new ArrayList<ClassInfo> ();
-		dataAgent.getData(listCrs);
+		dataAgent.getDataCourse(listCrs);
 		return listCrs;
 	}
 	

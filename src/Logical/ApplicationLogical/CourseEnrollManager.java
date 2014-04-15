@@ -3,8 +3,13 @@
  */
 package Logical.ApplicationLogical;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Logical.DomainBase.CourseEnrollment;
 import Logical.DomainBase.SchoolClass;
 import Logical.DomainBase.Student;
+import TechnicalService.PData_CSVFile;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -13,58 +18,28 @@ import Logical.DomainBase.Student;
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class CourseEnrollManager {
+	private PDataAgent dataAgent;
+	private static CourseEnrollManager instance = null;
+	private CourseEnrollManager() {
+		dataAgent = new PData_CSVFile();
+	}
+
+	public static CourseEnrollManager getInstance() {
+		if (instance == null) {
+			instance = new CourseEnrollManager();
+		}
+		return instance;
+	}
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
+	 * @param infoList 
+	 * @param currentCourse 
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	private SchoolClass _class;
-
-	/** 
-	 * @return the _class
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public SchoolClass get_class() {
-		// begin-user-code
-		return _class;
-		// end-user-code
-	}
-
-	/** 
-	 * @param _class the _class to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void set_class(SchoolClass _class) {
-		// begin-user-code
-		this._class = _class;
-		// end-user-code
-	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	private Student student;
-
-	/** 
-	 * @return the student
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public Student getStudent() {
-		// begin-user-code
-		return student;
-		// end-user-code
-	}
-
-	/** 
-	 * @param student the student to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void setStudent(Student student) {
-		// begin-user-code
-		this.student = student;
-		// end-user-code
+	public void addCourseEnrollment(ClassInfo currentCourse, List<StudentInfo> stdList) {
+		List<CourseEnrollment> erlList = organizeEnrollList(currentCourse, stdList);
+		dataAgent.addData(erlList);
 	}
 
 	/** 
@@ -72,11 +47,20 @@ public class CourseEnrollManager {
 	 * <!-- end-UML-doc -->
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	public void addCourseEnrollment() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public void removeCourseEnrollment(ClassInfo currentCourse, List<StudentInfo> stdList) {
+		List<CourseEnrollment> erlList = organizeEnrollList(currentCourse, stdList);
+		dataAgent.removeData(erlList);
+	}
+	
+	private List<CourseEnrollment> organizeEnrollList(ClassInfo currentCourse, List<StudentInfo> infoList) {
+		List<CourseEnrollment> erlList = new ArrayList<CourseEnrollment>();
+		for (StudentInfo std: infoList) {
+			CourseEnrollment crsErl = new CourseEnrollment();
+			crsErl.setErlClass(new SchoolClass(currentCourse.getClassNumber()));
+			crsErl.setErlStudent(new Student(std.getStudentId()));
+			erlList.add(crsErl);
+		}
+		return erlList;
 	}
 
 	/** 
@@ -84,46 +68,44 @@ public class CourseEnrollManager {
 	 * <!-- end-UML-doc -->
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
-	public void removeCourseEnrollment() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public void getCourseEnrollment(List<CourseEnrollment> erlList) {
+		dataAgent.getDataEnroll(erlList);
 	}
 
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void getCourseEnrollment() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	private List<CourseEnrollment> getCourseEnrollment(ClassInfo cInfo) {
+		List<CourseEnrollment> erlListAll = new ArrayList<CourseEnrollment>();
+		List<CourseEnrollment> erlList = new ArrayList<CourseEnrollment>();
+		getCourseEnrollment(erlListAll);
+		for (CourseEnrollment erl: erlListAll) {
+			String clsStr = erl.getErlClass().getClassNumber();
+			if (clsStr.equalsIgnoreCase(cInfo.getClassNumber())) {
+				erlList.add(erl);
+			}
+		}
+		return erlList;
+	}
+	
+	public int countCourseEnrollment(ClassInfo cInfo) {
+		return getCourseEnrollment(cInfo).size();
 	}
 
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void saveDataAdd() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	public List<StudentInfo> getStudent(ClassInfo cls) {
+		List<CourseEnrollment> erlList = getCourseEnrollment(cls);
+		StudentManager studentManager = StudentManager.getInstance();
+		List<StudentInfo> allStd = studentManager.getStudent();
+		List<StudentInfo> clsStd = new ArrayList<StudentInfo>();
+		if ((allStd != null) && (allStd.size()>0)) {
+			for(CourseEnrollment erl: erlList) {
+				String crtStd = erl.getErlStudent().getStudentID();
+				for (StudentInfo std: allStd) {
+					if (crtStd.equalsIgnoreCase(std.getStudentId())) {
+						clsStd.add(std);
+						break;
+					}
+				}
+			}
+		}
+		return clsStd;
 	}
 
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void saveDataRemove() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
-	}
 }

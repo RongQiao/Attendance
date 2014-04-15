@@ -144,34 +144,6 @@ public class AttendenceRecord {
 		this.isExcused = isExcused;
 		// end-user-code
 	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	private AttdClass attdClass2;
-
-	/** 
-	 * @return the attdClass2
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public AttdClass getAttdClass2() {
-		// begin-user-code
-		return attdClass2;
-		// end-user-code
-	}
-
-	/** 
-	 * @param attdClass2 the attdClass2 to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void setAttdClass2(AttdClass attdClass2) {
-		// begin-user-code
-		this.attdClass2 = attdClass2;
-		// end-user-code
-	}
-
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->

@@ -6,6 +6,7 @@ package UserInterface;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -38,7 +40,7 @@ import Logical.DomainBase.Course;
  * @author qiao
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
-public class EditCourse extends JFrame{
+public class EditCourse extends AttdFrame{
 	/**
 	 * 
 	 */
@@ -47,8 +49,7 @@ public class EditCourse extends JFrame{
 	private CourseManager crsManager;
 	
 	//swing objects
-	private JPanel mainPanel;
-	private JPanel leftPanel;
+	private JScrollPane leftPanel;
 	private JPanel rightPanel;
 	private JPanel rTopPanel;
 	private JPanel rBotPanel;
@@ -64,33 +65,32 @@ public class EditCourse extends JFrame{
 	private JButton addBtn;
 	private JButton modifyBtn;
 	private JButton removeBtn;
+	private JButton enrollBtn;
 	
 	//constructor
 	public EditCourse() {
 		crsManager = CourseManager.getInstance();			
-		initMainFrame();
+		initFrame();
 		initTable();
 		initDetailField();
 		initBtn();
+	}	
+		
+	public void display() {
+		setVisible(true);
 		//show exist course
 		updateCourse();
-	}	
+	}
 	
-	private void initMainFrame() {
+	@Override
+	public void initFrame() {
+		super.initFrame();
 		//frame
-		setTitle("Edit Course");
-		setSize(600, 400);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
-		getContentPane().add(mainPanel);		
+		setTitle("Edit Course");	
 	}
 	
 	private void initTable() {
-		//left panel for course table
-		leftPanel = new JPanel();
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.LINE_AXIS));
-		mainPanel.add(leftPanel);
+		//left panel for course table		
 		String[] columnNames = {"classNumber", "courseName"};
 		String[][] tableCourse = {
 				{"1","Course1"}
@@ -99,7 +99,8 @@ public class EditCourse extends JFrame{
 		courseTable = new JTable(tableModel);
 		ListSelectionModel selectionModel = courseTable.getSelectionModel();
 		selectionModel.addListSelectionListener(new courseSelectionHandler());
-		leftPanel.add(courseTable);
+		leftPanel = new JScrollPane(courseTable);
+		mainPanel.add(leftPanel);
 	}
 	
 	private void initDetailField() {
@@ -146,9 +147,11 @@ public class EditCourse extends JFrame{
 		addBtn = new JButton("Add Course");
 		modifyBtn = new JButton("Modify Course");
 		removeBtn = new JButton("Remove Course");
+		enrollBtn = new JButton("Enroll Student");
 		rBotPanel.add(addBtn);
 		rBotPanel.add(modifyBtn);
 		rBotPanel.add(removeBtn);
+		rBotPanel.add(enrollBtn);
 		//set action listener
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,6 +166,11 @@ public class EditCourse extends JFrame{
 		removeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeCourse();
+			}
+		});
+		enrollBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//toEnrollFrame();
 			}
 		});
 	}
@@ -254,10 +262,7 @@ public class EditCourse extends JFrame{
 		ClassInfo emptyInfo = new ClassInfo();
 		setCourseDetail(emptyInfo);
 	}
-	
-	public void display() {
-		setVisible(true);
-	}
+
 	
 	class courseSelectionHandler implements ListSelectionListener {
 		@Override

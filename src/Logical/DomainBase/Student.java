@@ -17,6 +17,14 @@ public class Student extends Person {
 	 */
 	private String studentID;
 
+	public Student() {
+		
+	}
+	
+	public Student(String studentId) {
+		setStudentID(studentId);
+	}
+
 	/** 
 	 * @return the studentID
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"

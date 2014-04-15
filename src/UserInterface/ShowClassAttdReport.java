@@ -11,7 +11,7 @@ import Logical.DomainReport.SelectedClassAttdReport;
  * @author qiao
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
-public class ShowClassAttdReport {
+public class ShowClassAttdReport extends AttdFrame{
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->
@@ -85,5 +85,11 @@ public class ShowClassAttdReport {
 		// TODO Auto-generated method stub
 
 		// end-user-code
+	}
+
+	@Override
+	public void display() {
+		// TODO Auto-generated method stub
+		
 	}
 }
