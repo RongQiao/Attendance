@@ -6,6 +6,7 @@ package TechnicalService;
 import java.io.File;
 import java.nio.file.Path;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import Logical.ApplicationLogical.AttdRecordInfo;
+import Logical.ApplicationLogical.AttdRecordMuldaysInfo;
+import Logical.ApplicationLogical.DateAttd;
 import Logical.ApplicationLogical.PDataAgent;
 import Logical.ApplicationLogical.ClassInfo;
 import Logical.ApplicationLogical.StudentInfo;
@@ -20,6 +23,7 @@ import Logical.DomainBase.Course;
 import Logical.DomainBase.CourseEnrollment;
 import Logical.DomainBase.SchoolClass;
 import Logical.DomainBase.Student;
+import Logical.DomainReport.AttdCnt;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -100,6 +104,19 @@ public class PData_CSVFile extends PDataAgent {
 		name += dateFormat.format(arDate);
 		name += ".csv";
 		return name;
+	}
+	
+	private Date getDate(String arFileName) {
+		String dateStr = arFileName.substring(arFileName.indexOf('_')+1);
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date dt = null;
+		try {
+			dt = dateFormat.parse(dateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dt;
 	}
 
 	private String getDirName(ClassInfo crs) {
@@ -239,6 +256,70 @@ public class PData_CSVFile extends PDataAgent {
 					CSVFile.format(arStr, ar);
 					infoList.add(ar);
 				}
+			}
+		}
+	}
+	
+	@Override
+	public void getDataAttdRecord(ClassInfo currentCourse,
+			List<AttdRecordMuldaysInfo> infoList) {
+		if (infoList != null) {
+			//directory
+			String crsDirName = getDirName(currentCourse);
+			File dir = new File(crsDirName);
+			if (dir.exists() && dir.isDirectory()) {				
+				//read every file in the directory
+				File[] files = dir.listFiles();
+				List<AttdRecordInfo> oneDayARList = null;
+				boolean inited = false;
+				for (int i = 0; i < files.length; i++) {
+					String arFileName = files[i].getName();
+					Date dt = getDate(arFileName);
+					oneDayARList = new ArrayList<AttdRecordInfo>();
+					getDataAttdRecord(currentCourse, dt, oneDayARList);	
+					//fullfill data
+					for (AttdRecordInfo ar: oneDayARList) {
+						DateAttd da = new DateAttd(dt, ar.isAttendant());
+						String stdId = ar.getStdInfo().getStudentId();
+						//add the da to the student's record list
+						for (AttdRecordMuldaysInfo arm:infoList) {
+							if (arm.getStdInfo().getStudentId().equalsIgnoreCase(stdId)) {
+								arm.getAttdList().add(da);
+							}
+						}
+					}
+				}							
+			}
+		}		
+	}
+
+	@Override
+	public void getDataAttdReport(ClassInfo currentCourse, List<AttdCnt> acList) {
+		if (acList == null) {
+			return;
+		}
+		acList.clear();
+		//directory
+		String crsDirName = getDirName(currentCourse);
+		File dir = new File(crsDirName);
+		if (dir.exists() && dir.isDirectory()) {				
+			//read every file in the directory
+			File[] files = dir.listFiles();
+			List<AttdRecordInfo> oneDayARList = null;
+			for (int i = 0; i < files.length; i++) {
+				String arFileName = files[i].getName();
+				Date dt = getDate(arFileName);
+				oneDayARList = new ArrayList<AttdRecordInfo>();
+				getDataAttdRecord(currentCourse, dt, oneDayARList);	
+				AttdCnt acOneday = new AttdCnt(dt, oneDayARList.size(), 0);
+				int cnt = 0;
+				for (AttdRecordInfo ar: oneDayARList) {
+					if (ar.isAttendant()) {
+						cnt++;
+					}
+				}
+				acOneday.setAttdNumbers(cnt);
+				acList.add(acOneday);
 			}
 		}
 	}
@@ -442,6 +523,8 @@ public class PData_CSVFile extends PDataAgent {
 	public void modifyData(ClassInfo currentCourse, Date arDate, List<AttdRecordInfo> infoList) {
 		addData(currentCourse, arDate, infoList);
 	}
+
+
 
 
 

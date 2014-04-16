@@ -10,6 +10,7 @@ import Logical.DomainBase.Course;
 import Logical.DomainBase.CourseEnrollment;
 import Logical.DomainBase.SchoolClass;
 import Logical.DomainBase.Student;
+import Logical.DomainReport.AttdCnt;
 import Logical.ApplicationLogical.ClassInfo;
 
 /** 
@@ -54,5 +55,9 @@ public abstract class PDataAgent {
 	public abstract void getDataAttdRecord(ClassInfo currentCourse, Date arDate,
 			List<AttdRecordInfo> infoList);
 
+	public abstract void getDataAttdRecord(ClassInfo currentCourse,
+			List<AttdRecordMuldaysInfo> infoList);
+
+	public abstract void getDataAttdReport(ClassInfo currentCourse, List<AttdCnt> acList);
 
 }

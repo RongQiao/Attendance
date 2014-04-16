@@ -3,7 +3,30 @@
  */
 package UserInterface;
 
-import Logical.DomainReport.SelectedClassAttdReport;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
+import Logical.ApplicationLogical.AttdRecordManager;
+import Logical.ApplicationLogical.ClassInfo;
+import Logical.ApplicationLogical.CourseEnrollManager;
+import Logical.ApplicationLogical.CourseManager;
+import Logical.ApplicationLogical.DateAttd;
+import Logical.ApplicationLogical.StudentManager;
+import Logical.DomainReport.AttdCnt;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -12,84 +35,102 @@ import Logical.DomainReport.SelectedClassAttdReport;
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class ShowClassAttdReport extends AttdFrame{
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
+	/**
+	 * 
 	 */
-	private SelectedClassAttdReport report;
-
-	/** 
-	 * @return the report
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public SelectedClassAttdReport getReport() {
-		// begin-user-code
-		return report;
-		// end-user-code
+	private static final long serialVersionUID = 1L;
+	protected CourseManager crsManager;
+	protected StudentManager studentManager;
+	protected CourseEnrollManager enrollManager;
+	protected AttdRecordManager attdManager;
+	protected ClassInfo currentCourse;
+	
+	private JScrollPane topPanel;
+	private JPanel botPanel;
+	private HistogramPanel higsogram;
+	private JTable courseTable;
+	
+	ShowClassAttdReport() {
+		crsManager = CourseManager.getInstance();
+		studentManager = StudentManager.getInstance();
+		enrollManager = CourseEnrollManager.getInstance();		
+		attdManager = AttdRecordManager.getInsance();
+		
+		initFrame();
+		initTable();
+		initHistogram();
 	}
-
-	/** 
-	 * @param report the report to set
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void setReport(SelectedClassAttdReport report) {
-		// begin-user-code
-		this.report = report;
-		// end-user-code
+	
+	public void initFrame() {
+		super.initFrame();
+		//frame
+		setTitle("Show Class Attendance Report");	
+		mainPanel.setLayout((LayoutManager) new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		//mainPanel.setLayout(new BorderLayout());
 	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void show() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	
+	protected void initTable() {
+		//top panel for course table
+		String[] crsColumnNames = {"classNumber", "courseName", "enrolledNumber"};
+		Object[][] tableCourse = {
+				{"1","Course1", new Integer(0)}
+		};
+		DefaultTableModel tableModel = new DefaultTableModel(tableCourse, crsColumnNames);
+		courseTable = new JTable(tableModel);			
+		topPanel = new JScrollPane(courseTable);
+		topPanel.setMaximumSize(new Dimension((int) this.getMaximumSize().getWidth(), 20));
+		mainPanel.add(topPanel);
+		ListSelectionModel selectionModel = courseTable.getSelectionModel();
+		selectionModel.addListSelectionListener(new courseSelectionHandler());
 	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void draw() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	
+	private void initHistogram() {
+		botPanel = new JPanel();
+		higsogram = new HistogramPanel();
+		botPanel.add(higsogram);
+		mainPanel.add(botPanel);
 	}
+	
+	public void updateCourse() {
+		List<ClassInfo> listCrs = crsManager.getCourse();
+		DefaultTableModel tableModel = (DefaultTableModel) courseTable.getModel();
+		tableModel.getDataVector().removeAllElements();		
+		courseTable.updateUI();
 
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void countAttendance() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+		for (ClassInfo cInfo: listCrs) {
+			int cnt = enrollManager.countCourseEnrollment(cInfo);
+			Object[] row = new Object[]{cInfo.getClassNumber(), cInfo.getCourseName(), new Integer(cnt)};
+			tableModel.addRow(row);
+		}
+		courseTable.updateUI();
 	}
-
-	/** 
-	 * <!-- begin-UML-doc -->
-	 * <!-- end-UML-doc -->
-	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
-	public void countAbsent() {
-		// begin-user-code
-		// TODO Auto-generated method stub
-
-		// end-user-code
+	
+	public void selectCourse() {
+		int rowIdx = courseTable.getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) courseTable.getModel();
+		if (rowIdx < tableModel.getRowCount()) {
+			String value = (String) tableModel.getValueAt(rowIdx, 0);
+			ClassInfo classInfo = crsManager.getCourse(value);
+			currentCourse = classInfo;		
+			
+			List<AttdCnt> acList = new ArrayList<AttdCnt>();
+			attdManager.getAttdRecord(currentCourse, acList);
+			higsogram.setData(acList);	
+			higsogram.display(currentCourse.getCourseName());
+		}
 	}
-
+	
 	@Override
 	public void display() {
-		// TODO Auto-generated method stub
-		
+		setVisible(true);
+		updateCourse();
+	}
+	
+	
+	class courseSelectionHandler implements ListSelectionListener {
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			selectCourse();
+		}
 	}
 }

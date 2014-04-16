@@ -9,6 +9,7 @@ import java.util.List;
 
 import Logical.DomainBase.AttdClass;
 import Logical.DomainBase.Student;
+import Logical.DomainReport.AttdCnt;
 import TechnicalService.PData_CSVFile;
 
 /** 
@@ -82,11 +83,29 @@ public class AttdRecordManager {
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
 	public List<AttdRecordInfo> getAttdRecord(ClassInfo currentCourse, Date arDate) {
-		CourseManager crsManager = CourseManager.getInstance();
-		currentCourse = crsManager.getCourse(currentCourse.getClassNumber());
 		List<AttdRecordInfo> infoList = new ArrayList<AttdRecordInfo>();
 		dataAgent.getDataAttdRecord(currentCourse, arDate, infoList);
 		return infoList;
+	}
+
+	public List<AttdRecordMuldaysInfo> getAttdRecord(ClassInfo currentCourse) {
+		//init students info
+		List<AttdRecordMuldaysInfo> infoList = new ArrayList<AttdRecordMuldaysInfo>();
+		CourseEnrollManager enrollManager = CourseEnrollManager.getInstance();
+		List<StudentInfo> stdList = enrollManager.getStudent(currentCourse);
+		for (StudentInfo std: stdList) {
+			AttdRecordMuldaysInfo arm = new AttdRecordMuldaysInfo();
+			arm.setStdInfo(std);
+			arm.setAttdList(new ArrayList<DateAttd>());
+			infoList.add(arm);
+		}
+		//add records
+		dataAgent.getDataAttdRecord(currentCourse, infoList);
+		return infoList;
+	}
+
+	public void getAttdRecord(ClassInfo currentCourse, List<AttdCnt> acList) {
+		dataAgent.getDataAttdReport(currentCourse, acList);
 	}
 
 }

@@ -2,9 +2,9 @@ package Logical.ApplicationLogical;
 
 import java.util.List;
 
-public class AttdRecordInfo {
+public class AttdRecordMuldaysInfo {
 	private StudentInfo stdInfo;
-	private boolean isAttendant;
+	private List<DateAttd> attdList;
 	
 	public StudentInfo getStdInfo() {
 		return stdInfo;
@@ -12,10 +12,10 @@ public class AttdRecordInfo {
 	public void setStdInfo(StudentInfo stdInfo) {
 		this.stdInfo = stdInfo;
 	}
-	public boolean isAttendant() {
-		return isAttendant;
+	public List<DateAttd> getAttdList() {
+		return attdList;
 	}
-	public void setAttendant(boolean isAttendant) {
-		this.isAttendant = isAttendant;
+	public void setAttdList(List<DateAttd> attdList) {
+		this.attdList = attdList;
 	}
 }

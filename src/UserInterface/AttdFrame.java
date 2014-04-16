@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-public abstract class AttdFrame extends JFrame{
+public class AttdFrame extends JFrame{
 	/**
 	 * 
 	 */
@@ -23,7 +23,10 @@ public abstract class AttdFrame extends JFrame{
 	public JMenu[] menu;
 	public JPanel mainPanel;
 
-	public abstract void display();
+	public void display() {
+		
+	}
+	
 	public void initFrame() {
 		//frame
 		setSize(800, 400);

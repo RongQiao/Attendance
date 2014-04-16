@@ -3,26 +3,28 @@
  */
 package UserInterface;
 
+import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
+import Logical.ApplicationLogical.AttdRecordManager;
+import Logical.ApplicationLogical.AttdRecordMuldaysInfo;
 import Logical.ApplicationLogical.ClassInfo;
 import Logical.ApplicationLogical.CourseEnrollManager;
 import Logical.ApplicationLogical.CourseManager;
+import Logical.ApplicationLogical.DateAttd;
 import Logical.ApplicationLogical.StudentInfo;
 import Logical.ApplicationLogical.StudentManager;
-import Logical.DomainBase.SchoolClass;
-import Logical.DomainBase.Student;
-import Logical.DomainBase.AttendenceRecord;
-import UserInterface.EditAttdRecord.courseSelectionHandler;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -31,9 +33,14 @@ import UserInterface.EditAttdRecord.courseSelectionHandler;
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class ShowClassAttdRecord extends AttdFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected CourseManager crsManager;
 	protected StudentManager studentManager;
 	protected CourseEnrollManager enrollManager;
+	protected AttdRecordManager attdManager;
 	protected ClassInfo currentCourse;
 	
 	private JScrollPane topPanel;
@@ -45,6 +52,7 @@ public class ShowClassAttdRecord extends AttdFrame{
 		crsManager = CourseManager.getInstance();
 		studentManager = StudentManager.getInstance();
 		enrollManager = CourseEnrollManager.getInstance();		
+		attdManager = AttdRecordManager.getInsance();
 		
 		initFrame();
 		initTable();
@@ -55,6 +63,7 @@ public class ShowClassAttdRecord extends AttdFrame{
 		//frame
 		setTitle("Show Class Attendance Records");	
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		//mainPanel.setLayout(new BorderLayout());
 	}
 	
 	protected void initTable() {
@@ -64,20 +73,29 @@ public class ShowClassAttdRecord extends AttdFrame{
 				{"1","Course1", new Integer(0)}
 		};
 		DefaultTableModel tableModel = new DefaultTableModel(tableCourse, crsColumnNames);
-		courseTable = new JTable(tableModel);		
-		topPanel = new JScrollPane(courseTable);		
+		courseTable = new JTable(tableModel);			
+		topPanel = new JScrollPane(courseTable);
+		topPanel.setMaximumSize(new Dimension((int) this.getMaximumSize().getWidth(), 20));
 		mainPanel.add(topPanel);
 		ListSelectionModel selectionModel = courseTable.getSelectionModel();
 		selectionModel.addListSelectionListener(new courseSelectionHandler());
-		//bottom panel for student attendance record table
-		String[] stdColumnNames = {"StudentID", "LastName", "FirstName"};
+		//show all day's attendance as a cell table
+		List<DateAttd> days = new ArrayList<DateAttd>();
+		days.add(new DateAttd(new Date(), false));
+		JTable cellTable = new JTable(new AttdTableModel(days));
+		String[] stdColumnNames = {"StudentID", "LastName", "FirstName", "AttendanceRecord"};
 		Object[][] tableStd = {
-				{"1","aa", "aa"}
+				{"","", "", cellTable}
 		};
 		StudentTableModel stdTableModel = new StudentTableModel(tableStd, stdColumnNames);
 		studentTable = new JTable(stdTableModel);		
 		botPanel = new JScrollPane(studentTable);		
 		mainPanel.add(botPanel);
+		//this is to show the cell table
+		TableColumn tc = studentTable.getColumnModel().getColumn(3);  
+        tc.setCellRenderer(new CustomTableCellRenderer(cellTable));  
+        tc.setCellEditor(new CustomTableCellEditor(cellTable));   
+        studentTable.setRowHeight(cellTable.getPreferredSize().height+cellTable.getTableHeader().getPreferredSize().height+4); 
 	}
 	
 	public void updateCourse() {
@@ -99,9 +117,11 @@ public class ShowClassAttdRecord extends AttdFrame{
 		tableModel.getDataVector().removeAllElements();		
 		studentTable.updateUI();
 
-		List<StudentInfo> listStd = enrollManager.getStudent(currentCourse);
-		for (StudentInfo info: listStd) {
-			Object[] row = new Object[]{info.getStudentId(), info.getFirstName(), info.getLastName()};
+		List<AttdRecordMuldaysInfo> arList = attdManager.getAttdRecord(currentCourse);
+		for (AttdRecordMuldaysInfo info: arList) {
+			StudentInfo std = info.getStdInfo();
+			JTable cellTable = new JTable(new AttdTableModel(info.getAttdList()));
+			Object[] row = new Object[]{std.getStudentId(), std.getFirstName(), std.getLastName(), cellTable};
 			tableModel.addRow(row);
 		}
 		studentTable.updateUI();
@@ -130,4 +150,5 @@ public class ShowClassAttdRecord extends AttdFrame{
 			selectCourse();
 		}
 	}
+
 }

@@ -33,7 +33,7 @@ public class MainFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				MainFrame mFrame = MainFrame.getInstance();
-				mFrame.setCurrentFrame(mFrame.getECFrame());
+				mFrame.setCurrentFrame(mFrame.getARDFrame());
 				mFrame.getCurrentFrame().display();
 			}
 		});
