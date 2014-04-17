@@ -96,6 +96,9 @@ public class EditAttdRecord extends CourseStudentFrame{
 		JPanel pnl = new JPanel();
 		dateLbl = new JLabel("Attendance Record Date:");
 		dateTxt = new JTextField(10);
+		//show record date as today
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		dateTxt.setText(dateFormat.format(new Date()));
 		pnl.add(dateLbl);
 		pnl.add(dateTxt);
 		queryBtn = new JButton("Query");
@@ -326,6 +329,10 @@ public class EditAttdRecord extends CourseStudentFrame{
 		}
 	}
 	
+	public void selectStudent() {
+	
+	}
+	
 	class courseSelectionHandler implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -336,7 +343,7 @@ public class EditAttdRecord extends CourseStudentFrame{
 	class studentSelectionHandler implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			
+			selectStudent();
 		}
 	}
 }

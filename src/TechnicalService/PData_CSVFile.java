@@ -452,6 +452,48 @@ public class PData_CSVFile extends PDataAgent {
 		}
 	}
 	
+	/*
+	 * remove attdance record for a student in a course
+	 */
+	@Override
+	public void removeData(ClassInfo currentCourse, StudentInfo std) {
+		//directory
+		String crsDirName = getDirName(currentCourse);
+		File dir = new File(crsDirName);
+		if (dir.exists() && dir.isDirectory()) {
+			//read every file in the directory
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				String arFileName = files[i].getName();
+				arFileName = crsDirName + "/" + arFileName;
+				removeAttdRecord(arFileName, std);
+			}
+		}
+	}
+	
+	private void removeAttdRecord(String fileName, StudentInfo std) {
+		//get all of courses
+		CSVFile file = new CSVFile(fileName);
+		List<String> lines = new ArrayList<String>();
+		file.read(lines);
+		//search, if found, remove it
+		boolean found = false;
+		Iterator<String> iter = lines.iterator();
+		while(iter.hasNext()) {
+			String strFromFile = iter.next();
+			strFromFile = strFromFile.substring(0, strFromFile.indexOf(','));
+			if (strFromFile.equalsIgnoreCase(std.getStudentId())) {
+				iter.remove();
+				found = true;
+				break;
+			}							
+		}
+		if (found) {
+			String data = lineList2String(lines);
+			file.write(data);
+		}
+	}
+	
 	@Override
 	public void modifyData(Course crs) {
 		//get all of courses
@@ -523,11 +565,4 @@ public class PData_CSVFile extends PDataAgent {
 	public void modifyData(ClassInfo currentCourse, Date arDate, List<AttdRecordInfo> infoList) {
 		addData(currentCourse, arDate, infoList);
 	}
-
-
-
-
-
-
-
 }

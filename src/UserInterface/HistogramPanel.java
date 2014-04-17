@@ -140,7 +140,7 @@ public class HistogramPanel extends JPanel{
 			displayed = true;
 	        // Make a frame and add this instance (as JPanel).
 	        JFrame frame = new JFrame();
-	        frame.setSize (600, 480);
+	        frame.setSize (800, 600);
 	        frame.setTitle(titile);
 	        frame.getContentPane().add (this);
 	        frame.addWindowListener (new closeHistogram());

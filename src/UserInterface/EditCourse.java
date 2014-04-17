@@ -151,7 +151,7 @@ public class EditCourse extends AttdFrame{
 		rBotPanel.add(addBtn);
 		rBotPanel.add(modifyBtn);
 		rBotPanel.add(removeBtn);
-		rBotPanel.add(enrollBtn);
+		//rBotPanel.add(enrollBtn);
 		//set action listener
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

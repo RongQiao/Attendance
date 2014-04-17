@@ -29,7 +29,7 @@ public class AttdFrame extends JFrame{
 	
 	public void initFrame() {
 		//frame
-		setSize(800, 400);
+		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
@@ -40,7 +40,7 @@ public class AttdFrame extends JFrame{
 	public void initMenu() {
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		String[] menuStr = {"Course", "Student", "Enrollment", "Attendance", "show", "report"};
+		String[] menuStr = {"Course", "Student", "Enrollment", "Attendance", "AttendanceDetail", "AttendanceReport"};
 		menu = new JMenu[menuStr.length];
 		for (int i = 0; i < menuStr.length; i++) {
 			menu[i] = new JMenu(menuStr[i]);

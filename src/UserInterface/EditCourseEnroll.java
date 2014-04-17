@@ -34,6 +34,7 @@ public class EditCourseEnroll extends AttdFrame{
 	private StudentManager studentManager;
 	private CourseEnrollManager enrollManager;
 	private ClassInfo currentCourse;
+	private StudentInfo currentStudent;
 	
 	//swing objects
 	private JPanel topPanel;
@@ -107,7 +108,7 @@ public class EditCourseEnroll extends AttdFrame{
 		addBtn = new JButton("Update Enrollment");
 		removeBtn = new JButton("Remove Enrollment");
 		bottomPanel.add(addBtn);
-		//bottomPanel.add(removeBtn);
+		bottomPanel.add(removeBtn);
 		//set action listener
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -122,17 +123,10 @@ public class EditCourseEnroll extends AttdFrame{
 	}
 	
 	protected void removeEnroll() {
-		if (currentCourse != null) {
+		if ((currentCourse != null) && (currentStudent != null))  {
 			int cnt = studentTable.getRowCount();
 			List<StudentInfo> infoList = new ArrayList<StudentInfo>();
-			for (int i = 0; i < cnt; i++) {
-				boolean isEnroll = (boolean) studentTable.getValueAt(i, 0);
-				if (isEnroll) {
-					StudentInfo info = new StudentInfo();
-					info.setStudentId((String) studentTable.getValueAt(i, 1));
-					infoList.add(info);
-				}				
-			}
+			infoList.add(currentStudent);
 			if (infoList.size() > 0) {
 				enrollManager.removeCourseEnrollment(currentCourse, infoList);
 				countCourseEnroll();
@@ -236,8 +230,12 @@ public class EditCourseEnroll extends AttdFrame{
 	}
 
 	public void selectStudent() {
-		// TODO Auto-generated method stub
-		
+		int rowIdx = studentTable.getSelectedRow();
+		DefaultTableModel tableModel = (DefaultTableModel) studentTable.getModel();
+		if (rowIdx < tableModel.getRowCount()) {
+			String value = (String) tableModel.getValueAt(rowIdx, 1);
+			currentStudent = studentManager.getStudent(value);
+		}
 	}	
 	
 	class courseSelectionHandler implements ListSelectionListener {

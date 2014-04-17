@@ -71,8 +71,12 @@ public class StudentManager {
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
 
-	public void removeStudent(StudentInfo info) {
-		dataAgent.removeData(info);
+	public void removeStudent(StudentInfo std) {
+		//AttdRecordManager attdManager = AttdRecordManager.getInsance();
+		//attdManager.removeAttdRecord(std);
+		CourseEnrollManager enrollManager = CourseEnrollManager.getInstance();
+		enrollManager.removeCourseEnrollment(std);
+		dataAgent.removeData(std);
 	}
 
 	public List<StudentInfo> getStudent() {

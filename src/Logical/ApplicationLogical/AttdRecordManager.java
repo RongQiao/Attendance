@@ -74,6 +74,17 @@ public class AttdRecordManager {
 		dataAgent.removeData(currentCourse, arDate);
 	}
 	
+	public void removeAttdRecord(ClassInfo currentCourse, StudentInfo std) {
+		dataAgent.removeData(currentCourse, std);
+	}
+	
+	public void removeAttdRecord(StudentInfo std) {
+		CourseManager crsManager = CourseManager.getInstance();
+		List<ClassInfo> allCls = crsManager.getCourse();
+		for (ClassInfo cls: allCls) {
+			removeAttdRecord(cls, std);
+		}
+	}
 	/** 
 	 * <!-- begin-UML-doc -->
 	 * <!-- end-UML-doc -->

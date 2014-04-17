@@ -48,8 +48,22 @@ public class CourseEnrollManager {
 	 * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
 	public void removeCourseEnrollment(ClassInfo currentCourse, List<StudentInfo> stdList) {
+		AttdRecordManager attdManager = AttdRecordManager.getInsance();
+		for (StudentInfo std: stdList) {
+			attdManager.removeAttdRecord(currentCourse, std);			
+		}
 		List<CourseEnrollment> erlList = organizeEnrollList(currentCourse, stdList);
 		dataAgent.removeData(erlList);
+	}
+	
+	public void removeCourseEnrollment(StudentInfo std) {
+		List<StudentInfo> stdList = new ArrayList<StudentInfo>();
+		stdList.add(std);
+		CourseManager crsManager = CourseManager.getInstance();
+		List<ClassInfo> clsList = crsManager.getCourse();
+		for (ClassInfo cls: clsList) {
+			removeCourseEnrollment(cls, stdList);
+		}
 	}
 	
 	private List<CourseEnrollment> organizeEnrollList(ClassInfo currentCourse, List<StudentInfo> infoList) {
@@ -107,5 +121,6 @@ public class CourseEnrollManager {
 		}
 		return clsStd;
 	}
+
 
 }

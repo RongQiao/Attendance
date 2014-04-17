@@ -46,6 +46,8 @@ public abstract class PDataAgent {
 
 	public abstract void removeData(ClassInfo currentCourse, Date arDate);
 
+	public abstract void removeData(ClassInfo currentCourse, StudentInfo std);
+	
 	public abstract void getDataCourse(List<ClassInfo> listCrs);
 
 	public abstract void getDataStudent(List<StudentInfo> listStd);
@@ -59,5 +61,6 @@ public abstract class PDataAgent {
 			List<AttdRecordMuldaysInfo> infoList);
 
 	public abstract void getDataAttdReport(ClassInfo currentCourse, List<AttdCnt> acList);
+
 
 }
