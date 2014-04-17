@@ -2,6 +2,10 @@ package UserInterface;
 
 import javax.swing.SwingUtilities;
 
+/*
+ * this is the main entry of the application. 
+ * create all frame here, and control the display of every frame
+ */
 public class MainFrame {
 	private EditCourse ECFrame;
 	private EditStudent ESFrame;

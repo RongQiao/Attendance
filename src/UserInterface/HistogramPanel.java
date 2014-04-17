@@ -105,7 +105,16 @@ public class HistogramPanel extends JPanel{
 
         // Y-ticks
         // We'll make only 10 ticks.
-        int numYTicks = (maxY > 10) ? 10 : maxY;
+        int numYTicks = 10;
+        if (maxY < numYTicks) {
+        	numYTicks = maxY;
+        }
+        else {
+        	int times = maxY/numYTicks;
+        	if ((maxY % numYTicks) > 0) {
+        		maxY = numYTicks * (times + 1);
+        	}
+        }
         int yDelta = maxY / numYTicks;
         int yDeltaHeight = (D.height-2*inset) / numYTicks;
         for (i=0; i<=numYTicks; i++) {
@@ -122,15 +131,16 @@ public class HistogramPanel extends JPanel{
         i = 0;
         for (AttdCnt ac: acList) {
         	int num = ac.getAttdNumbers();
+        	int numExpect = ac.getExpectedNumbers();
         	double heightTimes = (double)ac.getAttdNumbers()/(double)yDelta;
         	int barHeight = (int) (yDeltaHeight * heightTimes);
         	int x = delta * i + inset;
         	int y = D.height - inset - barHeight;
-        	int yExpect = D.height - inset - maxY/yDelta*yDeltaHeight;
+        	int yExpect = D.height - inset - numExpect/yDelta*yDeltaHeight;
         	int barWidth = 10;
         	i++;
         	g.setColor(Color.RED);
-        	g.fillRect (x, yExpect, barWidth, maxY/yDelta*yDeltaHeight);
+        	g.fillRect (x, yExpect, barWidth, numExpect/yDelta*yDeltaHeight);
             g.setColor (Color.blue);
             g.fillRect (x+barWidth, y, barWidth, barHeight);
             g.drawString(Integer.toString(num), x+barWidth*2, y);

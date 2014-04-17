@@ -3,12 +3,13 @@
  */
 package UserInterface;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -62,8 +63,8 @@ public class ShowClassAttdRecord extends AttdFrame{
 		super.initFrame();
 		//frame
 		setTitle("Show Class Attendance Records");	
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		//mainPanel.setLayout(new BorderLayout());
+		mainPanel = new JPanel(new BorderLayout());
+		getContentPane().add(mainPanel);
 	}
 	
 	protected void initTable() {
@@ -75,8 +76,8 @@ public class ShowClassAttdRecord extends AttdFrame{
 		DefaultTableModel tableModel = new DefaultTableModel(tableCourse, crsColumnNames);
 		courseTable = new JTable(tableModel);			
 		topPanel = new JScrollPane(courseTable);
-		topPanel.setMaximumSize(new Dimension((int) this.getMaximumSize().getWidth(), 20));
-		mainPanel.add(topPanel);
+		
+		mainPanel.add(topPanel, BorderLayout.PAGE_START);
 		ListSelectionModel selectionModel = courseTable.getSelectionModel();
 		selectionModel.addListSelectionListener(new courseSelectionHandler());
 		//show all day's attendance as a cell table
@@ -88,9 +89,13 @@ public class ShowClassAttdRecord extends AttdFrame{
 				{"","", "", cellTable}
 		};
 		StudentTableModel stdTableModel = new StudentTableModel(tableStd, stdColumnNames);
-		studentTable = new JTable(stdTableModel);		
+		studentTable = new JTable(stdTableModel);	
+		studentTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+		studentTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+		studentTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+		studentTable.getColumnModel().getColumn(3).setPreferredWidth(550);
 		botPanel = new JScrollPane(studentTable);		
-		mainPanel.add(botPanel);
+		mainPanel.add(botPanel, BorderLayout.PAGE_END);
 		//this is to show the cell table
 		TableColumn tc = studentTable.getColumnModel().getColumn(3);  
         tc.setCellRenderer(new CustomTableCellRenderer(cellTable));  
@@ -127,6 +132,13 @@ public class ShowClassAttdRecord extends AttdFrame{
 		studentTable.updateUI();
 	}
 	
+	
+	private void clearStudent() {
+		StudentTableModel tableModel = (StudentTableModel) studentTable.getModel();
+		tableModel.getDataVector().removeAllElements();		
+		studentTable.updateUI();
+	}
+	
 	public void selectCourse() {
 		int rowIdx = courseTable.getSelectedRow();
 		DefaultTableModel tableModel = (DefaultTableModel) courseTable.getModel();
@@ -142,8 +154,10 @@ public class ShowClassAttdRecord extends AttdFrame{
 	public void display() {
 		setVisible(true);
 		updateCourse();
+		clearStudent();
 	}
-	
+
+
 	class courseSelectionHandler implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
