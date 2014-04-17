@@ -3,7 +3,6 @@ package UserInterface;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
@@ -17,6 +16,10 @@ import javax.swing.JPanel;
 import Logical.DomainReport.AttdCnt;
 
 public class HistogramPanel extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<AttdCnt> acList;
 	// GUI stuff.
     int inset=60;            // Inset of axes and bounding box.

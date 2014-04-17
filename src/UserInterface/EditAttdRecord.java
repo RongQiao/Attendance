@@ -4,7 +4,6 @@
 package UserInterface;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -18,8 +17,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -29,16 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import Logical.ApplicationLogical.AttdRecordInfo;
 import Logical.ApplicationLogical.AttdRecordManager;
 import Logical.ApplicationLogical.ClassInfo;
-import Logical.ApplicationLogical.CourseEnrollManager;
-import Logical.ApplicationLogical.CourseManager;
 import Logical.ApplicationLogical.StudentInfo;
-import Logical.ApplicationLogical.StudentManager;
-import Logical.DomainBase.AttdClass;
-import Logical.DomainBase.CourseEnrollment;
-import Logical.DomainBase.Student;
-import Logical.DomainBase.AttendenceRecord;
-import UserInterface.EditCourseEnroll.courseSelectionHandler;
-import UserInterface.EditCourseEnroll.studentSelectionHandler;
 
 /** 
  * <!-- begin-UML-doc -->
@@ -47,6 +35,10 @@ import UserInterface.EditCourseEnroll.studentSelectionHandler;
  * @generated "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class EditAttdRecord extends CourseStudentFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private AttdRecordManager arManager;
 	//swing objects
 	private JButton newBtn;

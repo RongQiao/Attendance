@@ -2,10 +2,8 @@ package UserInterface;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import Logical.ApplicationLogical.DateAttd;
@@ -33,7 +31,7 @@ public class AttdTableModel extends AbstractTableModel{
 		}
 	}
 
-	public Class getColumnClass(int col) {
+	public Class<? extends Object> getColumnClass(int col) {
 		return getValueAt(0, col).getClass();
 	}
 	

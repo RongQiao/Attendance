@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import Logical.DomainBase.AttdClass;
-import Logical.DomainBase.Student;
 import Logical.DomainReport.AttdCnt;
 import TechnicalService.PData_CSVFile;
 

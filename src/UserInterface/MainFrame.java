@@ -1,6 +1,5 @@
 package UserInterface;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class MainFrame {
@@ -33,7 +32,7 @@ public class MainFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				MainFrame mFrame = MainFrame.getInstance();
-				mFrame.setCurrentFrame(mFrame.getARDFrame());
+				mFrame.setCurrentFrame(mFrame.getARFrame());
 				mFrame.getCurrentFrame().display();
 			}
 		});

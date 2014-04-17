@@ -1,6 +1,5 @@
 package UserInterface;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,15 +7,12 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 import Logical.ApplicationLogical.ClassInfo;
@@ -25,11 +21,13 @@ import Logical.ApplicationLogical.CourseManager;
 import Logical.ApplicationLogical.StudentInfo;
 import Logical.ApplicationLogical.StudentManager;
 import Logical.DomainBase.CourseEnrollment;
-import UserInterface.EditCourse.courseSelectionHandler;
-import UserInterface.EditStudent.studentSelectionHandler;
 
 public class EditCourseEnroll extends AttdFrame{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private CourseManager crsManager;
 	private StudentManager studentManager;
 	private CourseEnrollManager enrollManager;
@@ -124,7 +122,6 @@ public class EditCourseEnroll extends AttdFrame{
 	
 	protected void removeEnroll() {
 		if ((currentCourse != null) && (currentStudent != null))  {
-			int cnt = studentTable.getRowCount();
 			List<StudentInfo> infoList = new ArrayList<StudentInfo>();
 			infoList.add(currentStudent);
 			if (infoList.size() > 0) {

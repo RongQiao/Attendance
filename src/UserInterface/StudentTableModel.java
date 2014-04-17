@@ -33,7 +33,7 @@ public class StudentTableModel extends DefaultTableModel {
 	}
 	
 	//implementing this method is to let the boolean column showed as a check box
-	public Class getColumnClass(int col) {
+	public Class<? extends Object> getColumnClass(int col) {
 		return getValueAt(0, col).getClass();
 	}
 	

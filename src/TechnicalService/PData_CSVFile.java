@@ -4,7 +4,6 @@
 package TechnicalService;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -271,7 +270,6 @@ public class PData_CSVFile extends PDataAgent {
 				//read every file in the directory
 				File[] files = dir.listFiles();
 				List<AttdRecordInfo> oneDayARList = null;
-				boolean inited = false;
 				for (int i = 0; i < files.length; i++) {
 					String arFileName = files[i].getName();
 					Date dt = getDate(arFileName);

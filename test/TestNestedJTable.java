@@ -119,7 +119,11 @@ public class TestNestedJTable extends JFrame{
       
     class CustomTableCellEditor extends AbstractCellEditor implements TableCellEditor{  
   
-        JTable table;  
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		JTable table;  
           
         CustomTableCellEditor(JTable table){  
             this.table=table;  

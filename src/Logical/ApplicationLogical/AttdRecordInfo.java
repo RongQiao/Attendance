@@ -1,7 +1,5 @@
 package Logical.ApplicationLogical;
 
-import java.util.List;
-
 public class AttdRecordInfo {
 	private StudentInfo stdInfo;
 	private boolean isAttendant;

@@ -1,19 +1,11 @@
 package UserInterface;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import Logical.ApplicationLogical.ClassInfo;
@@ -21,11 +13,12 @@ import Logical.ApplicationLogical.CourseEnrollManager;
 import Logical.ApplicationLogical.CourseManager;
 import Logical.ApplicationLogical.StudentInfo;
 import Logical.ApplicationLogical.StudentManager;
-import Logical.DomainBase.CourseEnrollment;
-import UserInterface.EditCourseEnroll.courseSelectionHandler;
-import UserInterface.EditCourseEnroll.studentSelectionHandler;
 
 public abstract class CourseStudentFrame extends AttdFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected CourseManager crsManager;
 	protected StudentManager studentManager;
 	protected CourseEnrollManager enrollManager;

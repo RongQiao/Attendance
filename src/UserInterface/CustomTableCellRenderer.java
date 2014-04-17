@@ -5,7 +5,6 @@ import java.awt.Component;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 public class CustomTableCellRenderer extends DefaultTableCellRenderer {  
 	

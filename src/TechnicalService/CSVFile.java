@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 import Logical.ApplicationLogical.AttdRecordInfo;
-import Logical.ApplicationLogical.ClassInfo;
 import Logical.ApplicationLogical.StudentInfo;
 import Logical.DomainBase.Course;
 import Logical.DomainBase.CourseEnrollment;
